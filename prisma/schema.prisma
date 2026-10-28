@@ -1,0 +1,185 @@
+// CarrierChaos durable application state.
+//
+// PostgreSQL is the source of truth for job state, attempts, dead letters and persisted policies.
+// Redis/BullMQ only coordinates delivery; every queue message carries nothing but a job id.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum JobStatus {
+  queued
+  processing
+  completed
+  failed
+  dead_lettered
+  cancelled
+
+  @@map("job_status")
+}
+
+enum AttemptOutcome {
+  succeeded
+  retryable_error
+  permanent_error
+  abandoned
+
+  @@map("attempt_outcome")
+}
+
+enum ExperimentStatus {
+  running
+  completed
+
+  @@map("experiment_status")
+}
+
+model Job {
+  id                   String    @id @default(uuid()) @db.Uuid
+  /// Client-supplied key identifying one logical retrieval operation.
+  idempotencyKey       String    @unique @map("idempotency_key")
+  /// Fingerprint of the request payload; a reused key with a different payload is rejected.
+  requestHash          String    @map("request_hash")
+  carrierId            String    @map("carrier_id")
+  policyId             String    @map("policy_id")
+  status               JobStatus @default(queued)
+  /// Upstream attempts made in the current run (deferrals do not count).
+  attempts             Int       @default(0)
+  maxAttempts          Int       @map("max_attempts")
+  deadlineAt           DateTime? @map("deadline_at")
+  /// Incremented by each manual retry/replay; selects the BullMQ job id for the run.
+  replayCount          Int       @default(0) @map("replay_count")
+  /// Fencing token of the execution that currently owns the job.
+  executionId          String?   @map("execution_id") @db.Uuid
+  executionCount       Int       @default(0) @map("execution_count")
+  cancelRequested      Boolean   @default(false) @map("cancel_requested")
+  circuitDeferrals     Int       @default(0) @map("circuit_deferrals")
+  rateLimitDeferrals   Int       @default(0) @map("rate_limit_deferrals")
+  nextAttemptAt        DateTime? @map("next_attempt_at")
+  lastErrorKind        String?   @map("last_error_kind")
+  lastErrorMessage     String?   @map("last_error_message")
+  terminalReason       String?   @map("terminal_reason")
+  resultPolicyRecordId String?   @map("result_policy_record_id") @db.Uuid
+  experimentId         String?   @map("experiment_id") @db.Uuid
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  /// Start of the current run (creation, or the latest manual retry).
+  enqueuedAt           DateTime  @default(now()) @map("enqueued_at")
+  /// First time a worker picked the job up in the current run.
+  runStartedAt         DateTime? @map("run_started_at")
+  /// When the current run reached a terminal state.
+  finishedAt           DateTime? @map("finished_at")
+
+  resultPolicy PolicyRecord? @relation(fields: [resultPolicyRecordId], references: [id])
+  experiment   Experiment?   @relation(fields: [experimentId], references: [id])
+  attemptLog   JobAttempt[]
+  deadLetters  DeadLetter[]
+
+  @@index([status, createdAt])
+  @@index([carrierId, status])
+  @@index([experimentId])
+  @@index([createdAt, id])
+  @@map("jobs")
+}
+
+model JobAttempt {
+  id            String          @id @default(uuid()) @db.Uuid
+  jobId         String          @map("job_id") @db.Uuid
+  run           Int
+  attemptNumber Int             @map("attempt_number")
+  executionId   String          @map("execution_id") @db.Uuid
+  workerId      String          @map("worker_id")
+  /// Null while the attempt is in flight.
+  outcome       AttemptOutcome?
+  errorKind     String?         @map("error_kind")
+  httpStatus    Int?            @map("http_status")
+  errorMessage  String?         @map("error_message")
+  retryDelayMs  Int?            @map("retry_delay_ms")
+  startedAt     DateTime        @default(now()) @map("started_at")
+  finishedAt    DateTime?       @map("finished_at")
+  durationMs    Int?            @map("duration_ms")
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, run, attemptNumber])
+  @@index([startedAt])
+  @@map("job_attempts")
+}
+
+model DeadLetter {
+  id         String    @id @default(uuid()) @db.Uuid
+  jobId      String    @map("job_id") @db.Uuid
+  run        Int
+  carrierId  String    @map("carrier_id")
+  errorKind  String?   @map("error_kind")
+  reason     String
+  message    String?
+  attempts   Int
+  createdAt  DateTime  @default(now()) @map("created_at")
+  replayedAt DateTime? @map("replayed_at")
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, run])
+  @@index([replayedAt, createdAt])
+  @@map("dead_letters")
+}
+
+/// One row per (carrier, policy). Written with an idempotent upsert so repeated or
+/// concurrent retrievals of the same policy never create duplicates.
+model PolicyRecord {
+  id            String   @id @default(uuid()) @db.Uuid
+  carrierId     String   @map("carrier_id")
+  policyId      String   @map("policy_id")
+  schemaVersion String   @map("schema_version")
+  data          Json
+  contentHash   String   @map("content_hash")
+  /// Incremented only when the content actually changes.
+  version       Int      @default(1)
+  /// Incremented on every successful write (useful for at-least-once analysis).
+  fetchCount    Int      @default(1) @map("fetch_count")
+  firstJobId    String   @map("first_job_id") @db.Uuid
+  lastJobId     String   @map("last_job_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @map("updated_at")
+
+  jobs Job[]
+
+  @@unique([carrierId, policyId])
+  @@map("policy_records")
+}
+
+model Experiment {
+  id          String           @id @default(uuid()) @db.Uuid
+  scenario    String
+  seed        Int
+  status      ExperimentStatus @default(running)
+  config      Json
+  summary     Json?
+  startedAt   DateTime         @default(now()) @map("started_at")
+  completedAt DateTime?        @map("completed_at")
+
+  jobs Job[]
+
+  @@map("experiments")
+}
+
+model CircuitBreakerTransition {
+  id         String   @id @default(uuid()) @db.Uuid
+  carrierId  String   @map("carrier_id")
+  workerId   String   @map("worker_id")
+  fromState  String   @map("from_state")
+  toState    String   @map("to_state")
+  reason     String
+  occurredAt DateTime @map("occurred_at")
+
+  @@index([carrierId, occurredAt])
+  @@map("circuit_breaker_transitions")
+}
