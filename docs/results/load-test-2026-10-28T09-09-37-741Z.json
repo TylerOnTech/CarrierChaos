@@ -1,0 +1,191 @@
+{
+  "runId": "bfffc7ca",
+  "environment": {
+    "timestamp": "2026-10-28T09:09:37.741Z",
+    "gitCommit": "42b3556",
+    "node": "v22.22.0",
+    "platform": "Linux 6.18.44-fc-v180 (x64)",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz x 4",
+    "memoryGb": 15.7
+  },
+  "parameters": {
+    "totalJobs": 1000,
+    "concurrency": 50,
+    "carriers": [
+      {
+        "carrierId": "northwind",
+        "displayName": "Northwind Mutual (synthetic)",
+        "status": "healthy",
+        "circuitBreaker": {
+          "state": "CLOSED",
+          "workers": [
+            {
+              "workerId": "02cc13b04ef8-1",
+              "state": "CLOSED",
+              "windowRequests": 0,
+              "windowFailures": 0,
+              "retryAfterMs": 0,
+              "updatedAt": "2026-10-28T09:09:37.615Z"
+            }
+          ],
+          "lastTransition": null
+        },
+        "queue": {
+          "waiting": 0,
+          "active": 0,
+          "delayed": 0,
+          "failed": 0,
+          "completed": 200,
+          "paused": 0
+        },
+        "rateLimit": {
+          "capacity": 20,
+          "refillPerSecond": 50
+        },
+        "concurrency": 8,
+        "recentAttempts": {
+          "windowSeconds": 300,
+          "total": 250,
+          "succeeded": 200,
+          "successRate": 0.8
+        }
+      },
+      {
+        "carrierId": "bluepeak",
+        "displayName": "BluePeak Insurance (synthetic)",
+        "status": "healthy",
+        "circuitBreaker": {
+          "state": "CLOSED",
+          "workers": [
+            {
+              "workerId": "02cc13b04ef8-1",
+              "state": "CLOSED",
+              "windowRequests": 97,
+              "windowFailures": 0,
+              "retryAfterMs": 0,
+              "updatedAt": "2026-10-28T09:09:37.615Z"
+            }
+          ],
+          "lastTransition": {
+            "from": "HALF_OPEN",
+            "to": "CLOSED",
+            "reason": "2 consecutive probe successes",
+            "at": "2026-10-28T09:09:27.932Z"
+          }
+        },
+        "queue": {
+          "waiting": 0,
+          "active": 0,
+          "delayed": 0,
+          "failed": 60,
+          "completed": 100,
+          "paused": 0
+        },
+        "rateLimit": {
+          "capacity": 20,
+          "refillPerSecond": 50
+        },
+        "concurrency": 8,
+        "recentAttempts": {
+          "windowSeconds": 300,
+          "total": 120,
+          "succeeded": 100,
+          "successRate": 0.8333
+        }
+      },
+      {
+        "carrierId": "harborline",
+        "displayName": "Harborline Casualty (synthetic)",
+        "status": "healthy",
+        "circuitBreaker": {
+          "state": "CLOSED",
+          "workers": [
+            {
+              "workerId": "02cc13b04ef8-1",
+              "state": "CLOSED",
+              "windowRequests": 0,
+              "windowFailures": 0,
+              "retryAfterMs": 0,
+              "updatedAt": "2026-10-28T09:09:37.616Z"
+            }
+          ],
+          "lastTransition": null
+        },
+        "queue": {
+          "waiting": 0,
+          "active": 0,
+          "delayed": 0,
+          "failed": 0,
+          "completed": 40,
+          "paused": 0
+        },
+        "rateLimit": {
+          "capacity": 10,
+          "refillPerSecond": 25
+        },
+        "concurrency": 8,
+        "recentAttempts": {
+          "windowSeconds": 300,
+          "total": 40,
+          "succeeded": 40,
+          "successRate": 1
+        }
+      }
+    ]
+  },
+  "ingest": {
+    "seconds": 3.67,
+    "requestsPerSecond": 272,
+    "failedSubmissions": 0,
+    "latencyMs": {
+      "count": 1000,
+      "p50": 172,
+      "p95": 301,
+      "p99": 376,
+      "max": 451,
+      "mean": 181
+    }
+  },
+  "processing": {
+    "statusCounts": {
+      "completed": 1000
+    },
+    "wallClockSeconds": 13.04,
+    "jobsPerSecond": 76.7,
+    "queueWaitMs": {
+      "count": 1000,
+      "p50": 2374,
+      "p95": 7569,
+      "p99": 8806,
+      "max": 9128,
+      "mean": 2756
+    },
+    "endToEndMs": {
+      "count": 1000,
+      "p50": 2502,
+      "p95": 7908,
+      "p99": 9101,
+      "max": 9425,
+      "mean": 2935
+    },
+    "totalAttempts": 1000,
+    "rateLimitWaits": 434
+  },
+  "upstream": {
+    "northwind": {
+      "requests": 334,
+      "peakRequestsPerSecond": 61,
+      "maxConcurrent": 7
+    },
+    "bluepeak": {
+      "requests": 333,
+      "peakRequestsPerSecond": 57,
+      "maxConcurrent": 8
+    },
+    "harborline": {
+      "requests": 333,
+      "peakRequestsPerSecond": 30,
+      "maxConcurrent": 6
+    }
+  }
+}

@@ -18,7 +18,7 @@ and an audit trail) or mTLS. The mock carrier's `/admin` API uses the same token
 
 | Endpoint | Auth |
 |---|---|
-| `POST /jobs`, `GET /jobs`, `GET /jobs/:id`, `GET /dead-letters` | none (client-facing reads/writes) |
+| `POST /jobs`, `GET /jobs`, `GET /jobs/:id`, `GET /dead-letters` | none (client-facing; these return synthetic policyholder data, and real data would need tenant-scoped auth) |
 | `POST /jobs/:id/retry`, `POST /jobs/:id/cancel`, `POST /experiments` | **admin** |
 | `GET /experiments/:id`, `GET /health`, `GET /carriers/health`, `GET /metrics` | none |
 

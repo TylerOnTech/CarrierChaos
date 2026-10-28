@@ -1,0 +1,635 @@
+{
+  "environment": {
+    "timestamp": "2026-10-28T09:08:59.012Z",
+    "gitCommit": "42b3556",
+    "node": "v22.22.0",
+    "platform": "Linux 6.18.44-fc-v180 (x64)",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz x 4",
+    "memoryGb": 15.7
+  },
+  "carriers": [
+    {
+      "carrierId": "northwind",
+      "displayName": "Northwind Mutual (synthetic)",
+      "status": "healthy",
+      "circuitBreaker": {
+        "state": "CLOSED",
+        "workers": [
+          {
+            "workerId": "02cc13b04ef8-1",
+            "state": "CLOSED",
+            "windowRequests": 0,
+            "windowFailures": 0,
+            "retryAfterMs": 0,
+            "updatedAt": "2026-10-28T09:08:57.612Z"
+          }
+        ],
+        "lastTransition": null
+      },
+      "queue": {
+        "waiting": 0,
+        "active": 0,
+        "delayed": 0,
+        "failed": 0,
+        "completed": 0,
+        "paused": 0
+      },
+      "rateLimit": {
+        "capacity": 20,
+        "refillPerSecond": 50
+      },
+      "concurrency": 8,
+      "recentAttempts": {
+        "windowSeconds": 300,
+        "total": 0,
+        "succeeded": 0,
+        "successRate": null
+      }
+    },
+    {
+      "carrierId": "bluepeak",
+      "displayName": "BluePeak Insurance (synthetic)",
+      "status": "healthy",
+      "circuitBreaker": {
+        "state": "CLOSED",
+        "workers": [
+          {
+            "workerId": "02cc13b04ef8-1",
+            "state": "CLOSED",
+            "windowRequests": 0,
+            "windowFailures": 0,
+            "retryAfterMs": 0,
+            "updatedAt": "2026-10-28T09:08:57.613Z"
+          }
+        ],
+        "lastTransition": null
+      },
+      "queue": {
+        "waiting": 0,
+        "active": 0,
+        "delayed": 0,
+        "failed": 0,
+        "completed": 0,
+        "paused": 0
+      },
+      "rateLimit": {
+        "capacity": 20,
+        "refillPerSecond": 50
+      },
+      "concurrency": 8,
+      "recentAttempts": {
+        "windowSeconds": 300,
+        "total": 0,
+        "succeeded": 0,
+        "successRate": null
+      }
+    },
+    {
+      "carrierId": "harborline",
+      "displayName": "Harborline Casualty (synthetic)",
+      "status": "healthy",
+      "circuitBreaker": {
+        "state": "CLOSED",
+        "workers": [
+          {
+            "workerId": "02cc13b04ef8-1",
+            "state": "CLOSED",
+            "windowRequests": 0,
+            "windowFailures": 0,
+            "retryAfterMs": 0,
+            "updatedAt": "2026-10-28T09:08:57.613Z"
+          }
+        ],
+        "lastTransition": null
+      },
+      "queue": {
+        "waiting": 0,
+        "active": 0,
+        "delayed": 0,
+        "failed": 0,
+        "completed": 0,
+        "paused": 0
+      },
+      "rateLimit": {
+        "capacity": 10,
+        "refillPerSecond": 25
+      },
+      "concurrency": 8,
+      "recentAttempts": {
+        "windowSeconds": 300,
+        "total": 0,
+        "succeeded": 0,
+        "successRate": null
+      }
+    }
+  ],
+  "results": [
+    {
+      "experimentId": "2734ee31-7f49-4d81-9127-a9346f82d990",
+      "scenario": "healthy",
+      "title": "A — Healthy carrier",
+      "description": "100 retrievals against a carrier with no injected failures.",
+      "seed": 42,
+      "status": "completed",
+      "startedAt": "2026-10-28T09:08:59.099Z",
+      "completedAt": "2026-10-28T09:09:01.070Z",
+      "durationMs": 1971,
+      "config": {
+        "carrierId": "northwind",
+        "jobCount": 100,
+        "faults": {},
+        "maxAttempts": null,
+        "deadlineMs": null,
+        "control": null,
+        "replayedDeadLetters": 0
+      },
+      "totals": {
+        "jobs": 100,
+        "completed": 100,
+        "successRate": 1
+      },
+      "carriers": {
+        "northwind": {
+          "role": "target",
+          "jobs": {
+            "total": 100,
+            "completed": 100,
+            "failed": 0,
+            "deadLettered": 0,
+            "cancelled": 0,
+            "inFlight": 0
+          },
+          "successRate": 1,
+          "attempts": {
+            "total": 100,
+            "retries": 0,
+            "jobsRetried": 0,
+            "maxPerJob": 1
+          },
+          "deferrals": {
+            "circuitOpen": 0,
+            "rateLimited": 42
+          },
+          "latencyMs": {
+            "queueWait": {
+              "count": 100,
+              "p50": 752,
+              "p95": 1431,
+              "p99": 1499,
+              "max": 1510,
+              "mean": 810
+            },
+            "endToEndCompleted": {
+              "count": 100,
+              "p50": 827,
+              "p95": 1569,
+              "p99": 1658,
+              "max": 1688,
+              "mean": 922
+            }
+          },
+          "failureDistribution": {},
+          "terminalReasons": {},
+          "circuitBreaker": {
+            "transitions": [],
+            "timesOpened": 0
+          },
+          "upstream": {
+            "requests": 100,
+            "byOutcome": {
+              "ok": 100
+            },
+            "peakRequestsPerSecond": 55,
+            "maxConcurrentRequests": 8,
+            "successfulResponses": 100,
+            "policiesServedMoreThanOnce": 0
+          }
+        }
+      },
+      "idempotency": {
+        "submissions": 110,
+        "jobsCreated": 100,
+        "duplicateSubmissionsDeduplicated": 10,
+        "completedJobs": 100,
+        "successfulAttempts": 100,
+        "jobsWithMultipleSuccessfulAttempts": 0,
+        "distinctPoliciesCompleted": 100,
+        "policyRecords": 100
+      }
+    },
+    {
+      "experimentId": "2f3131b6-ccf4-4565-a342-7a61093c7ccf",
+      "scenario": "intermittent",
+      "title": "B — Intermittent failures",
+      "description": "100 retrievals with 10% HTTP 429, 8% HTTP 500, 7% HTTP 503 and 5% hanging requests (client timeout).",
+      "seed": 42,
+      "status": "completed",
+      "startedAt": "2026-10-28T09:09:01.596Z",
+      "completedAt": "2026-10-28T09:09:06.570Z",
+      "durationMs": 4974,
+      "config": {
+        "carrierId": "northwind",
+        "jobCount": 100,
+        "faults": {
+          "timeout": 0.05,
+          "rate_limit": 0.1,
+          "unavailable": 0.07,
+          "server_error": 0.08
+        },
+        "maxAttempts": 6,
+        "deadlineMs": null,
+        "control": null,
+        "replayedDeadLetters": 0
+      },
+      "totals": {
+        "jobs": 100,
+        "completed": 100,
+        "successRate": 1
+      },
+      "carriers": {
+        "northwind": {
+          "role": "target",
+          "jobs": {
+            "total": 100,
+            "completed": 100,
+            "failed": 0,
+            "deadLettered": 0,
+            "cancelled": 0,
+            "inFlight": 0
+          },
+          "successRate": 1,
+          "attempts": {
+            "total": 150,
+            "retries": 50,
+            "jobsRetried": 33,
+            "maxPerJob": 4
+          },
+          "deferrals": {
+            "circuitOpen": 0,
+            "rateLimited": 0
+          },
+          "latencyMs": {
+            "queueWait": {
+              "count": 100,
+              "p50": 728,
+              "p95": 1809,
+              "p99": 1941,
+              "max": 1942,
+              "mean": 829
+            },
+            "endToEndCompleted": {
+              "count": 100,
+              "p50": 1406,
+              "p95": 4298,
+              "p99": 4825,
+              "max": 4924,
+              "mean": 1659
+            }
+          },
+          "failureDistribution": {
+            "RATE_LIMITED": 17,
+            "UPSTREAM_ERROR": 15,
+            "UNAVAILABLE": 10,
+            "TIMEOUT": 8
+          },
+          "terminalReasons": {},
+          "circuitBreaker": {
+            "transitions": [],
+            "timesOpened": 0
+          },
+          "upstream": {
+            "requests": 150,
+            "byOutcome": {
+              "ok": 100,
+              "timeout": 8,
+              "server_error": 15,
+              "rate_limit": 17,
+              "unavailable": 10
+            },
+            "peakRequestsPerSecond": 48,
+            "maxConcurrentRequests": 8,
+            "successfulResponses": 100,
+            "policiesServedMoreThanOnce": 0
+          }
+        }
+      },
+      "idempotency": {
+        "submissions": 110,
+        "jobsCreated": 100,
+        "duplicateSubmissionsDeduplicated": 10,
+        "completedJobs": 100,
+        "successfulAttempts": 100,
+        "jobsWithMultipleSuccessfulAttempts": 0,
+        "distinctPoliciesCompleted": 100,
+        "policyRecords": 100
+      }
+    },
+    {
+      "experimentId": "9b1c25eb-f693-4c84-a362-a474357a0ba9",
+      "scenario": "outage",
+      "title": "C — Carrier outage",
+      "description": "Sustained HTTP 503 from one carrier while a healthy control carrier receives traffic concurrently.",
+      "seed": 42,
+      "status": "completed",
+      "startedAt": "2026-10-28T09:09:07.019Z",
+      "completedAt": "2026-10-28T09:09:24.012Z",
+      "durationMs": 16993,
+      "config": {
+        "carrierId": "bluepeak",
+        "jobCount": 60,
+        "faults": {
+          "unavailable": 1
+        },
+        "maxAttempts": 4,
+        "deadlineMs": 20000,
+        "control": {
+          "jobCount": 40,
+          "carrierId": "harborline"
+        },
+        "replayedDeadLetters": 0
+      },
+      "totals": {
+        "jobs": 100,
+        "completed": 40,
+        "successRate": 0.4
+      },
+      "carriers": {
+        "bluepeak": {
+          "role": "target",
+          "jobs": {
+            "total": 60,
+            "completed": 0,
+            "failed": 0,
+            "deadLettered": 60,
+            "cancelled": 0,
+            "inFlight": 0
+          },
+          "successRate": 0,
+          "attempts": {
+            "total": 20,
+            "retries": 2,
+            "jobsRetried": 2,
+            "maxPerJob": 2
+          },
+          "deferrals": {
+            "circuitOpen": 227,
+            "rateLimited": 0
+          },
+          "latencyMs": {
+            "queueWait": {
+              "count": 60,
+              "p50": 318,
+              "p95": 367,
+              "p99": 383,
+              "max": 383,
+              "mean": 275
+            },
+            "endToEndCompleted": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "failureDistribution": {
+            "UNAVAILABLE": 20
+          },
+          "terminalReasons": {
+            "deadline_exceeded": 60
+          },
+          "circuitBreaker": {
+            "transitions": [
+              {
+                "from": "CLOSED",
+                "to": "OPEN",
+                "atMs": 302,
+                "reason": "failure rate 100% (10/10) within 10000ms"
+              },
+              {
+                "from": "OPEN",
+                "to": "HALF_OPEN",
+                "atMs": 5392,
+                "reason": "open for 5000ms"
+              },
+              {
+                "from": "HALF_OPEN",
+                "to": "OPEN",
+                "atMs": 5464,
+                "reason": "probe failed"
+              },
+              {
+                "from": "OPEN",
+                "to": "HALF_OPEN",
+                "atMs": 10541,
+                "reason": "open for 5000ms"
+              },
+              {
+                "from": "HALF_OPEN",
+                "to": "OPEN",
+                "atMs": 10605,
+                "reason": "probe failed"
+              },
+              {
+                "from": "OPEN",
+                "to": "HALF_OPEN",
+                "atMs": 15678,
+                "reason": "open for 5000ms"
+              },
+              {
+                "from": "HALF_OPEN",
+                "to": "OPEN",
+                "atMs": 15746,
+                "reason": "probe failed"
+              }
+            ],
+            "timesOpened": 4
+          },
+          "upstream": {
+            "requests": 20,
+            "byOutcome": {
+              "unavailable": 20
+            },
+            "peakRequestsPerSecond": 14,
+            "maxConcurrentRequests": 4,
+            "successfulResponses": 0,
+            "policiesServedMoreThanOnce": 0
+          }
+        },
+        "harborline": {
+          "role": "control",
+          "jobs": {
+            "total": 40,
+            "completed": 40,
+            "failed": 0,
+            "deadLettered": 0,
+            "cancelled": 0,
+            "inFlight": 0
+          },
+          "successRate": 1,
+          "attempts": {
+            "total": 40,
+            "retries": 0,
+            "jobsRetried": 0,
+            "maxPerJob": 1
+          },
+          "deferrals": {
+            "circuitOpen": 0,
+            "rateLimited": 19
+          },
+          "latencyMs": {
+            "queueWait": {
+              "count": 40,
+              "p50": 285,
+              "p95": 718,
+              "p99": 808,
+              "max": 808,
+              "mean": 334
+            },
+            "endToEndCompleted": {
+              "count": 40,
+              "p50": 414,
+              "p95": 1066,
+              "p99": 1123,
+              "max": 1123,
+              "mean": 531
+            }
+          },
+          "failureDistribution": {},
+          "terminalReasons": {},
+          "circuitBreaker": {
+            "transitions": [],
+            "timesOpened": 0
+          },
+          "upstream": {
+            "requests": 40,
+            "byOutcome": {
+              "ok": 40
+            },
+            "peakRequestsPerSecond": 32,
+            "maxConcurrentRequests": 6,
+            "successfulResponses": 40,
+            "policiesServedMoreThanOnce": 0
+          }
+        }
+      },
+      "idempotency": {
+        "submissions": 100,
+        "jobsCreated": 100,
+        "duplicateSubmissionsDeduplicated": 0,
+        "completedJobs": 40,
+        "successfulAttempts": 40,
+        "jobsWithMultipleSuccessfulAttempts": 0,
+        "distinctPoliciesCompleted": 40,
+        "policyRecords": 40
+      }
+    },
+    {
+      "experimentId": "1f1671a0-fb3b-4c5b-aae2-53ffc75ea0cf",
+      "scenario": "recovery",
+      "title": "D — Recovery",
+      "description": "The failed carrier is restored; dead letters from the outage are replayed alongside new jobs.",
+      "seed": 42,
+      "status": "completed",
+      "startedAt": "2026-10-28T09:09:24.178Z",
+      "completedAt": "2026-10-28T09:09:29.547Z",
+      "durationMs": 5369,
+      "config": {
+        "carrierId": "bluepeak",
+        "jobCount": 40,
+        "faults": {},
+        "maxAttempts": null,
+        "deadlineMs": null,
+        "control": null,
+        "replayedDeadLetters": 60
+      },
+      "totals": {
+        "jobs": 100,
+        "completed": 100,
+        "successRate": 1
+      },
+      "carriers": {
+        "bluepeak": {
+          "role": "target",
+          "jobs": {
+            "total": 100,
+            "completed": 100,
+            "failed": 0,
+            "deadLettered": 0,
+            "cancelled": 0,
+            "inFlight": 0
+          },
+          "successRate": 1,
+          "attempts": {
+            "total": 100,
+            "retries": 0,
+            "jobsRetried": 0,
+            "maxPerJob": 1
+          },
+          "deferrals": {
+            "circuitOpen": 353,
+            "rateLimited": 62
+          },
+          "latencyMs": {
+            "queueWait": {
+              "count": 100,
+              "p50": 8,
+              "p95": 96,
+              "p99": 154,
+              "max": 159,
+              "mean": 30
+            },
+            "endToEndCompleted": {
+              "count": 100,
+              "p50": 4063,
+              "p95": 4989,
+              "p99": 5143,
+              "max": 5169,
+              "mean": 4155
+            }
+          },
+          "failureDistribution": {},
+          "terminalReasons": {},
+          "circuitBreaker": {
+            "transitions": [
+              {
+                "from": "OPEN",
+                "to": "HALF_OPEN",
+                "atMs": 3665,
+                "reason": "open for 5000ms"
+              },
+              {
+                "from": "HALF_OPEN",
+                "to": "CLOSED",
+                "atMs": 3754,
+                "reason": "2 consecutive probe successes"
+              }
+            ],
+            "timesOpened": 0
+          },
+          "upstream": {
+            "requests": 100,
+            "byOutcome": {
+              "ok": 100
+            },
+            "peakRequestsPerSecond": 65,
+            "maxConcurrentRequests": 8,
+            "successfulResponses": 100,
+            "policiesServedMoreThanOnce": 0
+          }
+        }
+      },
+      "idempotency": {
+        "submissions": 40,
+        "jobsCreated": 40,
+        "duplicateSubmissionsDeduplicated": 0,
+        "completedJobs": 100,
+        "successfulAttempts": 100,
+        "jobsWithMultipleSuccessfulAttempts": 0,
+        "distinctPoliciesCompleted": 100,
+        "policyRecords": 100
+      }
+    }
+  ]
+}
